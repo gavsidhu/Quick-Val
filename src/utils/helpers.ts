@@ -3,7 +3,7 @@ import axios from "axios";
 export const getURL = () => {
   let url =
     process.env.NODE_ENV === "development"
-      ? "http://localhost:3000/"
+      ? "http://localhost:3000"
       : (process?.env?.NEXT_PUBLIC_SITE_URL as string); // Set this to your site URL in production env.
 
   // Make sure to include `https://` when not localhost.

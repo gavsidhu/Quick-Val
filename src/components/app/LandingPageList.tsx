@@ -124,7 +124,7 @@ export default function LandingPageList({ initialPages }: Props) {
                       <Menu.Item>
                         {({ active }) => (
                           <Link
-                            href={`http://${page.subdomain}.localhost:3000/`}
+                            href={`http://${page.subdomain}.${url}/`}
                             target='_blank'
                             className={classNames(
                               active ? "bg-gray-50" : "",
