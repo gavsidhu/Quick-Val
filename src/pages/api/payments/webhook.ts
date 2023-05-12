@@ -72,6 +72,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           const landing_page_id =
             paymentIntentSucceeded.metadata.landing_page_id;
           const user_id = paymentIntentSucceeded.metadata.user_id;
+          console.log(paymentIntentSucceeded);
 
           const { data, error } = await supabaseAdmin.from('payments').insert({
             amount: paymentIntentSucceeded.amount,
