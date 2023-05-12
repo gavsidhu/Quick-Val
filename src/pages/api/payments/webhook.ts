@@ -18,7 +18,7 @@ export const config = {
 interface Subscription extends Stripe.Subscription {
   plan?: Stripe.Plan;
 }
-
+let debugData: any;
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const signingSecret = process.env.STRIPE_SIGNING_SECRET as string;
   const sig = req.headers['stripe-signature'] as string;
@@ -84,6 +84,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             status: paymentIntentSucceeded.status,
             user_id: user_id,
           });
+          debugData = {
+            amount: paymentIntentSucceeded.amount,
+            client_secret: paymentIntentSucceeded.client_secret,
+            customer_id: paymentIntentSucceeded.customer as string,
+            landing_page_id: parseInt(landing_page_id),
+            payment_intent_created: paymentIntentSucceeded.created,
+            payment_intent_id: paymentIntentSucceeded.id,
+            status: paymentIntentSucceeded.status,
+            user_id: user_id,
+            supabase: { data, error },
+          };
           console.log(data, error);
         } catch (error) {
           console.log(error);
@@ -93,7 +104,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
-    res.send({ recieved: true });
+    res.send({ recieved: true, debugData });
   } catch (error) {
     res.status(500).json({
       code: 'webhook_failed',
