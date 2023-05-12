@@ -6,12 +6,12 @@ export const config = {
 
 export default async function middleware(req: NextRequest) {
   const url = req.nextUrl;
-  const hostname = req.headers.get("host") || "tryspark.io";
+  const hostname = req.headers.get("host") || "quick-val.vercel.app";
   const path = url.pathname;
 
   const currentHost =
     process.env.NODE_ENV === "production" && process.env.VERCEL === "1"
-      ? hostname.replace(`.tryspark.io`, "")
+      ? hostname.replace(`.quick-val.vercel.app`, "")
       : hostname.replace(`.localhost:3000`, "");
 
   if (currentHost == "app") {
@@ -20,7 +20,7 @@ export default async function middleware(req: NextRequest) {
   }
 
   // rewrite root application to `/home` folder
-  if (hostname === "tryspark.io" || hostname === "localhost:3000") {
+  if (hostname === "quick-val.vercel.app" || hostname === "localhost:3000") {
     return NextResponse.rewrite(new URL(`/home${path}`, req.url));
   }
 
