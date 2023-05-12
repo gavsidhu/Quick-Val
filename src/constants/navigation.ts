@@ -1,17 +1,17 @@
 export const homeNavigation = [
-  { name: "Landing Pages", href: "/", current: false },
-  { name: "Account", href: "/account", current: false },
+  { name: 'Landing Pages', href: '/', current: false },
+  // { name: "Account", href: "/account", current: false },
 ];
 
 export const pageNavigation = (landingPageId: string | number) => [
-  { name: "Home", href: `/`, current: false },
+  { name: 'Home', href: `/`, current: false },
   {
-    name: "Payments",
+    name: 'Payments',
     href: `/landing-page/${landingPageId}/payments`,
     current: false,
   },
   {
-    name: "Editor",
+    name: 'Editor',
     href: `/editor/${landingPageId}`,
     current: false,
   },

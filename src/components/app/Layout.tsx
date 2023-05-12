@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { HiBars3, HiBell, HiUserCircle, HiXMark } from "react-icons/hi2";
 import { supabase } from "@/lib/supabaseClient";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/router";
 
@@ -17,9 +17,10 @@ type Props = {
 };
 
 export default function Layout({ title, children, navigation }: Props) {
+  console.log("layout check")
   const user = useUser();
   const router = useRouter();
-  const supabaseAuth = createBrowserSupabaseClient();
+  const supabaseClient = useSupabaseClient();
   return (
     <>
       <div className='min-h-full'>
@@ -84,7 +85,7 @@ export default function Layout({ title, children, navigation }: Props) {
                           <Menu.Item>
                             <button
                               onClick={async () => {
-                                await supabaseAuth.auth.signOut();
+                                await supabaseClient.auth.signOut();
                                 router.replace("/login");
                               }}
                               className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left'
@@ -143,7 +144,7 @@ export default function Layout({ title, children, navigation }: Props) {
                   <div className='mt-3 space-y-1'>
                     <button
                       onClick={async () => {
-                        await supabaseAuth.auth.signOut();
+                        await supabaseClient.auth.signOut();
                         router.replace("/login");
                       }}
                       className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left'

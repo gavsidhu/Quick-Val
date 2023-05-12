@@ -33,24 +33,6 @@ export default function index({ data }: Props) {
 
       // Send the initial data
       recordId = await sendAnalyticsData();
-
-      const handleVisibilityChange = () => {
-        if (document.visibilityState === "hidden" && recordId !== null) {
-          updateAnalyticsData(recordId, true);
-        }
-      };
-
-      window.addEventListener("visibilitychange", handleVisibilityChange);
-      window.addEventListener("beforeunload", handleVisibilityChange);
-
-      return () => {
-        if (recordId !== null) {
-          updateAnalyticsData(recordId);
-        }
-
-        window.removeEventListener("visibilitychange", handleVisibilityChange);
-        window.removeEventListener("beforeunload", handleVisibilityChange);
-      };
     })();
   }, [data]);
 
@@ -89,32 +71,6 @@ export default function index({ data }: Props) {
     }
   }
 
-  async function updateAnalyticsData(id: number, isVisibilityChange = false) {
-    const requestData = {
-      end_time: new Date().toISOString(),
-    };
-
-    if (isVisibilityChange && navigator.sendBeacon) {
-      // Use sendBeacon for visibilitychange event
-      const headers = { "Content-Type": "application/json" };
-      const blob = new Blob([JSON.stringify(requestData)], {
-        type: "application/json",
-      });
-
-      navigator.sendBeacon(`/api/analytics/${id}`, blob);
-    } else {
-      // Send the update using axios
-      try {
-        const response = await axios.put(`/api/analytics/${id}`, requestData);
-
-        if (response.status !== 200) {
-          console.error(response.data.error);
-        }
-      } catch (error) {
-        console.error("Error updating analytics data:", error);
-      }
-    }
-  }
   return (
     <>
       {data?.id && (
@@ -161,7 +117,7 @@ export const getStaticProps: GetStaticProps<SiteProps, SiteParams> = async ({
   params,
 }) => {
   if (!params) {
-    return { notFound: true, revalidate: 10 };
+    return { notFound: true };
   }
 
   const { site } = params;
@@ -176,13 +132,12 @@ export const getStaticProps: GetStaticProps<SiteProps, SiteParams> = async ({
 
   // If the site is not found or siteData is null, return notFound property
   if (!siteData || siteData.length === 0) {
-    return { notFound: true, revalidate: 10 };
+    return { notFound: true };
   }
   // Return the site data as props
   return {
     props: {
       data: siteData[0],
     },
-    revalidate: 10,
   };
 };

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useMemo } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { HiEllipsisVertical, HiPlus } from "react-icons/hi2";
 import axios from "axios";
@@ -19,33 +19,18 @@ type Props = {
 };
 
 export default function LandingPageList({ initialPages }: Props) {
-  const [pages, setPages] = useState(initialPages);
+  console.log("initial pages: ", initialPages)
+  const memoizedInitialPages = useMemo(() => initialPages, [initialPages]);
+  const [pages, setPages] = useState(memoizedInitialPages);
   const user = useUser();
   const router = useRouter();
+  //console.log("pages: ", pages)
 
-  useEffect(() => {
-    const handlePageDelete = (payload: any) => {
-      setPages(pages.filter((page) => page.id != parseInt(payload.old.id)));
-    };
-
-    const subscription = supabase
-      .channel("any")
-      .on(
-        "postgres_changes",
-        { event: "DELETE", schema: "public", table: "landing_pages" },
-        handlePageDelete
-      )
-      .subscribe();
-
-    return () => {
-      // Unsubscribe when the component is unmounted
-      subscription.unsubscribe();
-    };
-  }, []);
   const handleDelete = async (e: React.MouseEvent<HTMLElement>) => {
     await axios.delete(
       `${url}/api/landing-pages/${e.currentTarget.getAttribute("data-id")}`
     );
+    // setPages(pages.filter((page) => page.id != parseInt(e.currentTarget.getAttribute("data-id") as string)));
   };
   return (
     <>
@@ -121,12 +106,11 @@ export default function LandingPageList({ initialPages }: Props) {
                       <Menu.Item>
                         {({ active }: { active: boolean }) => (
                           <Link
-                            href={`${
-                              process.env.NODE_ENV === "development"
-                                ? `http://${page.subdomain}.localhost:3000/`
-                                : `https://${page.subdomain}.quick-val.vercel.app/`
-                            }`}
-                            target='_blank'
+                            href={`${process.env.NODE_ENV === "development"
+                              ? `http://${page.subdomain}.localhost:3000/`
+                              : `https://${page.subdomain}.quickval.co/`
+                              }`}
+                            target="_blank"
                             className={classNames(
                               active ? "bg-gray-50" : "",
                               "block px-3 py-1 text-sm leading-6 text-gray-900"
