@@ -1,5 +1,7 @@
 /* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable no-console */
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { PaymentIntent } from "@stripe/stripe-js";
 import { buffer } from "micro";
 import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
@@ -63,8 +65,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         // Then define and call a function to handle the event payment_intent.requires_action
         break;
       case "payment_intent.succeeded":
-        const paymentIntentSucceeded = event.data.object;
+        const paymentIntentSucceeded = event.data
+          .object as Stripe.PaymentIntent;
         // Then define and call a function to handle the event payment_intent.succeeded
+        try {
+          const landing_page_id =
+            paymentIntentSucceeded.metadata.landing_page_id;
+          const user_id = paymentIntentSucceeded.metadata.user_id;
+
+          const { data, error } = await supabaseAdmin.from("payments").insert({
+            amount: paymentIntentSucceeded.amount,
+            client_secret: paymentIntentSucceeded.client_secret,
+            customer_id: paymentIntentSucceeded.customer as string,
+            landing_page_id: parseInt(landing_page_id),
+            payment_intent_created: paymentIntentSucceeded.created,
+            payment_intent_id: paymentIntentSucceeded.id,
+            status: paymentIntentSucceeded.status,
+            user_id: user_id,
+          });
+        } catch (error) {
+          console.log(error);
+        }
         break;
       // ... handle other event types
       default:
