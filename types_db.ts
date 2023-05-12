@@ -14,33 +14,42 @@ export interface Database {
           country: string | null
           created_at: string | null
           device: string | null
+          end_time: string | null
           http_referer: string | null
           id: number
           ip_address: string | null
+          landing_page_id: number | null
           page: string | null
           time_spent: string | null
+          user_id: string | null
           visit_time: string | null
         }
         Insert: {
           country?: string | null
           created_at?: string | null
           device?: string | null
+          end_time?: string | null
           http_referer?: string | null
           id?: number
           ip_address?: string | null
+          landing_page_id?: number | null
           page?: string | null
           time_spent?: string | null
+          user_id?: string | null
           visit_time?: string | null
         }
         Update: {
           country?: string | null
           created_at?: string | null
           device?: string | null
+          end_time?: string | null
           http_referer?: string | null
           id?: number
           ip_address?: string | null
+          landing_page_id?: number | null
           page?: string | null
           time_spent?: string | null
+          user_id?: string | null
           visit_time?: string | null
         }
       }
@@ -88,36 +97,42 @@ export interface Database {
           user_id?: string
         }
       }
-      projects: {
+      payments: {
         Row: {
+          amount: number | null
+          client_secret: string | null
           created_at: string | null
-          custom_domain: string | null
-          description: string | null
+          customer_id: string | null
           id: number
-          project_name: string | null
-          subdomain: string | null
-          updated_at: string | null
-          user_id: string | null
+          landing_page_id: number
+          payment_intent_created: number | null
+          payment_intent_id: string | null
+          status: string | null
+          user_id: string
         }
         Insert: {
+          amount?: number | null
+          client_secret?: string | null
           created_at?: string | null
-          custom_domain?: string | null
-          description?: string | null
+          customer_id?: string | null
           id?: number
-          project_name?: string | null
-          subdomain?: string | null
-          updated_at?: string | null
-          user_id?: string | null
+          landing_page_id: number
+          payment_intent_created?: number | null
+          payment_intent_id?: string | null
+          status?: string | null
+          user_id: string
         }
         Update: {
+          amount?: number | null
+          client_secret?: string | null
           created_at?: string | null
-          custom_domain?: string | null
-          description?: string | null
+          customer_id?: string | null
           id?: number
-          project_name?: string | null
-          subdomain?: string | null
-          updated_at?: string | null
-          user_id?: string | null
+          landing_page_id?: number
+          payment_intent_created?: number | null
+          payment_intent_id?: string | null
+          status?: string | null
+          user_id?: string
         }
       }
     }
