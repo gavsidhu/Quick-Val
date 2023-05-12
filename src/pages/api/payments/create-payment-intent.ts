@@ -46,7 +46,7 @@ export default async function handler(
         enabled: true,
       },
       metadata: {
-        user_id: "",
+        user_id: user_id,
         landing_page_id: parseInt(landingPageId),
       },
     });
