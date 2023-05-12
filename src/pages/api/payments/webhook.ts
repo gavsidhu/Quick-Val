@@ -1,13 +1,13 @@
 /* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable no-console */
-import { supabaseAdmin } from "@/lib/supabaseAdmin";
-import { PaymentIntent } from "@stripe/stripe-js";
-import { buffer } from "micro";
-import { NextApiRequest, NextApiResponse } from "next";
-import Stripe from "stripe";
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { PaymentIntent } from '@stripe/stripe-js';
+import { buffer } from 'micro';
+import { NextApiRequest, NextApiResponse } from 'next';
+import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: "2022-11-15",
+  apiVersion: '2022-11-15',
 });
 export const config = {
   api: {
@@ -21,7 +21,7 @@ interface Subscription extends Stripe.Subscription {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const signingSecret = process.env.STRIPE_SIGNING_SECRET as string;
-  const sig = req.headers["stripe-signature"] as string;
+  const sig = req.headers['stripe-signature'] as string;
   const reqBuffer = await buffer(req);
   let event: Stripe.Event;
   try {
@@ -36,35 +36,35 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // Handle the event
     switch (event.type) {
-      case "payment_intent.amount_capturable_updated":
+      case 'payment_intent.amount_capturable_updated':
         const paymentIntentAmountCapturableUpdated = event.data.object;
         // Then define and call a function to handle the event payment_intent.amount_capturable_updated
         break;
-      case "payment_intent.canceled":
+      case 'payment_intent.canceled':
         const paymentIntentCanceled = event.data.object;
         // Then define and call a function to handle the event payment_intent.canceled
         break;
-      case "payment_intent.created":
+      case 'payment_intent.created':
         const paymentIntentCreated = event.data.object;
         // Then define and call a function to handle the event payment_intent.created
         break;
-      case "payment_intent.partially_funded":
+      case 'payment_intent.partially_funded':
         const paymentIntentPartiallyFunded = event.data.object;
         // Then define and call a function to handle the event payment_intent.partially_funded
         break;
-      case "payment_intent.payment_failed":
+      case 'payment_intent.payment_failed':
         const paymentIntentPaymentFailed = event.data.object;
         // Then define and call a function to handle the event payment_intent.payment_failed
         break;
-      case "payment_intent.processing":
+      case 'payment_intent.processing':
         const paymentIntentProcessing = event.data.object;
         // Then define and call a function to handle the event payment_intent.processing
         break;
-      case "payment_intent.requires_action":
+      case 'payment_intent.requires_action':
         const paymentIntentRequiresAction = event.data.object;
         // Then define and call a function to handle the event payment_intent.requires_action
         break;
-      case "payment_intent.succeeded":
+      case 'payment_intent.succeeded':
         const paymentIntentSucceeded = event.data
           .object as Stripe.PaymentIntent;
         // Then define and call a function to handle the event payment_intent.succeeded
@@ -73,7 +73,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             paymentIntentSucceeded.metadata.landing_page_id;
           const user_id = paymentIntentSucceeded.metadata.user_id;
 
-          const { data, error } = await supabaseAdmin.from("payments").insert({
+          const { data, error } = await supabaseAdmin.from('payments').insert({
             amount: paymentIntentSucceeded.amount,
             client_secret: paymentIntentSucceeded.client_secret,
             customer_id: paymentIntentSucceeded.customer as string,
@@ -83,6 +83,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             status: paymentIntentSucceeded.status,
             user_id: user_id,
           });
+          console.log(data, error);
         } catch (error) {
           console.log(error);
         }
@@ -94,7 +95,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.send({ recieved: true });
   } catch (error) {
     res.status(500).json({
-      code: "webhook_failed",
+      code: 'webhook_failed',
       error,
     });
   }

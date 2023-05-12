@@ -11,7 +11,7 @@ import {
 } from "@stripe/stripe-js";
 import { url } from "@/utils/url";
 
-interface CheckoutFormProps {}
+interface CheckoutFormProps { }
 
 const CheckoutForm: React.FC<CheckoutFormProps> = () => {
   const stripe = useStripe();
@@ -21,7 +21,6 @@ const CheckoutForm: React.FC<CheckoutFormProps> = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       setCurrentUrl(window.location.href);
-      console.log(window.location.href);
     }
   }, []);
   const [email, setEmail] = React.useState("");

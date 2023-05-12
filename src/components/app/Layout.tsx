@@ -17,7 +17,6 @@ type Props = {
 };
 
 export default function Layout({ title, children, navigation }: Props) {
-  console.log("layout check")
   const user = useUser();
   const router = useRouter();
   const supabaseClient = useSupabaseClient();

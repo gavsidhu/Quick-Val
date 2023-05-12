@@ -19,18 +19,34 @@ type Props = {
 };
 
 export default function LandingPageList({ initialPages }: Props) {
-  console.log("initial pages: ", initialPages)
-  const memoizedInitialPages = useMemo(() => initialPages, [initialPages]);
-  const [pages, setPages] = useState(memoizedInitialPages);
+  const [pages, setPages] = useState(initialPages);
   const user = useUser();
   const router = useRouter();
-  //console.log("pages: ", pages)
+
+  useEffect(() => {
+    const handlePageDelete = (payload: any) => {
+      setPages(pages.filter((page) => page.id != parseInt(payload.old.id)));
+    };
+
+    const subscription = supabase
+      .channel("any")
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "landing_pages" },
+        handlePageDelete
+      )
+      .subscribe();
+
+    return () => {
+      // Unsubscribe when the component is unmounted
+      subscription.unsubscribe();
+    };
+  }, [initialPages]);
 
   const handleDelete = async (e: React.MouseEvent<HTMLElement>) => {
     await axios.delete(
       `${url}/api/landing-pages/${e.currentTarget.getAttribute("data-id")}`
     );
-    // setPages(pages.filter((page) => page.id != parseInt(e.currentTarget.getAttribute("data-id") as string)));
   };
   return (
     <>
@@ -47,11 +63,11 @@ export default function LandingPageList({ initialPages }: Props) {
             </button>
           </div>{" "}
         </div>
-        <ul role='list' className=' px-4 rounded-lg border border-black'>
+        <ul role='list' className="space-y-2">
           {pages.map((page) => (
             <li
               key={page.id}
-              className='flex items-center justify-between gap-x-6 py-5'
+              className='flex items-center justify-between gap-x-6 py-5 border border-black px-4 rounded-lg'
             >
               <div className='min-w-0'>
                 <div className='flex flex-col spac items-start space-y-3 gap-x-3'>
