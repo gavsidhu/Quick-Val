@@ -13,6 +13,19 @@ export const getURL = () => {
   return url;
 };
 
+export const getAppURL = () => {
+  let url =
+    process.env.NODE_ENV === "development"
+      ? "http://app.localhost:3000"
+      : (process?.env?.NEXT_PUBLIC_SITE_URL as string);
+
+  // Make sure to include `https://` when not localhost.
+  url = url.includes("http") ? url : `https://${url}`;
+  // Make sure to including trailing `/`.
+  url = url.charAt(url.length - 1) === "/" ? url : `${url}/`;
+  return url;
+};
+
 export async function fetchIpAddressAndCountry() {
   try {
     const response = await axios.get("https://ipapi.co/json/");

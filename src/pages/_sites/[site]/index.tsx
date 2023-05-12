@@ -22,7 +22,6 @@ interface Props {
 }
 export default function index({ data }: Props) {
   const [open, setOpen] = useState(false);
-  console.log("landingPageID", data?.id);
 
   useEffect(() => {
     let recordId: number | null = null;
@@ -37,7 +36,6 @@ export default function index({ data }: Props) {
 
       const handleVisibilityChange = () => {
         if (document.visibilityState === "hidden" && recordId !== null) {
-          const endTime = new Date().getMilliseconds();
           updateAnalyticsData(recordId, true);
         }
       };

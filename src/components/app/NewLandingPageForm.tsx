@@ -1,34 +1,25 @@
 import { physicalProductTemplateInitialData } from "@/constants/physicalProductTemplateData";
+import { supabase } from "@/lib/supabaseClient";
+import { url } from "@/utils/url";
 import { Listbox, RadioGroup, Transition } from "@headlessui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 import { HiCheck, HiCheckCircle, HiChevronUpDown } from "react-icons/hi2";
 
 const goals = [
   { title: "Generate sales", value: "sales" },
-  { title: "Generate waitlist subscribers", value: "waitlist" },
+  // { title: "Generate waitlist subscribers", value: "waitlist" },
 ];
 
 const templates = [
   {
     id: "1",
-    title: "template 1",
+    title: "Default",
     goal: "sales",
-    description: "this is the description for template 1",
+    description: "A simple landing page optimized for sales.",
     content: physicalProductTemplateInitialData,
-  },
-  {
-    id: "2",
-    title: "template 2",
-    goal: "waitlist",
-    description: "this is the description for template 1",
-  },
-  {
-    id: "3",
-    title: "template 3",
-    goal: "sales",
-    description: "this is the description for template 1",
   },
 ];
 
@@ -38,6 +29,7 @@ function classNames(...classes: string[]) {
 
 export default function NewLandingPageForm() {
   const user = useUser();
+  const router = useRouter();
   const [step, setStep] = useState(0);
   const [goal, setGoal] = useState(goals[0]);
   const [template, setTemplate] = useState(templates[0]);
@@ -47,8 +39,32 @@ export default function NewLandingPageForm() {
     subdomain: "",
   });
 
-  const nextStep = () => {
-    setStep(step + 1);
+  const nextStep = async () => {
+    switch (step) {
+      case 0:
+        if (
+          !landingPageData.title ||
+          !landingPageData.description ||
+          !landingPageData.subdomain
+        ) {
+          return alert("Please fill in all fields.");
+        }
+        const response = await axios.post(
+          `${url}/api/landing-pages/check-subdomain`,
+          {
+            subdomain: landingPageData.subdomain,
+          }
+        );
+        if (response.data.data.length > 0) {
+          return alert("Subdomain taken. Please try another one.");
+        }
+        return setStep(step + 1);
+      case 1:
+        if (!template) {
+          return alert("Please select a template");
+        }
+        setStep(step + 1);
+    }
   };
 
   const prevStep = () => {
@@ -73,32 +89,33 @@ export default function NewLandingPageForm() {
         goal: goal.value,
         content: template.content,
       });
+      router.push("/");
     } catch (error) {
       console.error("Error creating site: ", error);
     }
   };
   return (
     <div className='flex h-screen'>
-      <div className='w-1/2 m-auto px-8 py-8 bg-white border border-gray-200 rounded-lg'>
+      <div className='w-1/2 m-auto px-8 py-8 bg-white border border-black rounded-lg'>
         {/* Add name, description and subdomain */}
         {step === 0 && (
           <div className='w-full space-y-4'>
-            <h2 className='text-xl text-center font-bold'>
+            <h2 className='text-2xl text-center font-heading font-black'>
               Create a new landing page
             </h2>
             <div className='space-y-4'>
-              <div className=' rounded-md shadow-sm'>
+              <div className=' rounded-md'>
                 <input
                   type='text'
                   name='title'
                   id='title'
                   required
-                  placeholder='Project Name'
+                  placeholder='Landing Page Title'
                   onChange={(e) => onChange(e)}
                   className='block px-2 w-full min-w-0 flex-1 rounded-md border border-gray-300 py-1.5 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-none'
                 />
               </div>
-              <div className=' rounded-md shadow-sm'>
+              <div className=' rounded-md'>
                 <textarea
                   name='description'
                   id='description'
@@ -108,7 +125,7 @@ export default function NewLandingPageForm() {
                   className='block resize-none px-2 w-full min-w-0 flex-1 rounded-md border border-gray-300 py-1.5 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-none'
                 />
               </div>
-              <div className='flex w-full rounded-md shadow-sm'>
+              <div className='flex w-full rounded-md'>
                 <input
                   type='text'
                   name='subdomain'
@@ -118,7 +135,7 @@ export default function NewLandingPageForm() {
                   className='block px-2 w-full min-w-0 flex-1 border-r-0 rounded-r-none rounded-md border border-gray-300 py-1.5 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-none'
                 />
                 <span className='inline-flex items-center rounded-r-md border border-l-0 border-gray-300 px-3 text-gray-500 sm:text-sm'>
-                  .tryspark.io
+                  .quick-val.vercel.app
                 </span>
               </div>
               <Listbox value={goal} onChange={setGoal}>
@@ -182,9 +199,9 @@ export default function NewLandingPageForm() {
         )}
         {/* Choose landing page template */}
         {step === 1 && (
-          <div>
+          <div className='text-center'>
             <RadioGroup value={template} onChange={setTemplate}>
-              <RadioGroup.Label className='text-base font-semibold leading-6 text-gray-900'>
+              <RadioGroup.Label className='text-2xl text-center font-heading font-black'>
                 Select a landing page template
               </RadioGroup.Label>
 
@@ -198,10 +215,8 @@ export default function NewLandingPageForm() {
                       className={({ checked, active }) =>
                         classNames(
                           checked ? "border-transparent" : "border-gray-300",
-                          active
-                            ? "border-indigo-600 ring-2 ring-indigo-600"
-                            : "",
-                          "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                          active ? "border-black ring-2 ring-black" : "",
+                          "relative flex cursor-pointer rounded-lg border bg-white p-4 focus:outline-none"
                         )
                       }
                     >
@@ -218,7 +233,7 @@ export default function NewLandingPageForm() {
 
                               <RadioGroup.Label
                                 as='span'
-                                className='block text-sm font-medium text-gray-900'
+                                className='block text-lg font-black text-gray-900'
                               >
                                 {template.title}
                               </RadioGroup.Label>
@@ -234,9 +249,7 @@ export default function NewLandingPageForm() {
                           <span
                             className={classNames(
                               active ? "border" : "border-2",
-                              checked
-                                ? "border-indigo-600"
-                                : "border-transparent",
+                              checked ? "border-black" : "border-transparent",
                               "pointer-events-none absolute -inset-px rounded-lg"
                             )}
                             aria-hidden='true'
@@ -250,9 +263,30 @@ export default function NewLandingPageForm() {
           </div>
         )}
         <div className='mt-8 space-x-3 flex justify-end'>
-          {step > 0 && <button onClick={prevStep}>Back</button>}
-          {step < 1 && <button onClick={nextStep}>Next</button>}
-          {step === 1 && <button onClick={createLandingPage}>Create</button>}
+          {step > 0 && (
+            <button
+              onClick={prevStep}
+              className='rounded-md bg-black px-4 py-2.5 text-sm font-semibold text-white border border-black hover:text-black hover:bg-white'
+            >
+              Back
+            </button>
+          )}
+          {step < 1 && (
+            <button
+              onClick={nextStep}
+              className='rounded-md bg-black px-4 py-2.5 text-sm font-semibold text-white border border-black hover:text-black hover:bg-white'
+            >
+              Next
+            </button>
+          )}
+          {step === 1 && (
+            <button
+              onClick={createLandingPage}
+              className='rounded-md bg-black px-4 py-2.5 text-sm font-semibold text-white border border-black hover:text-black hover:bg-white'
+            >
+              Create
+            </button>
+          )}
         </div>
       </div>
     </div>

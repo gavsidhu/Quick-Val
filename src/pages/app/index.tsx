@@ -8,21 +8,15 @@ import { homeNavigation } from "@/constants/navigation";
 import PaymentModal from "@/components/app/PaymentModal";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 type Props = {
   pages: Database["public"]["Tables"]["landing_pages"]["Row"][];
 };
 
 export default function Home({ pages }: Props) {
-  const router = useRouter();
-  const { id } = router.query;
-  const [open, setOpen] = useState(true);
-  supabase.auth.onAuthStateChange((event, session) => {
-    console.log(event, session);
-  });
   return (
     <main>
-      <PaymentModal landingPageId={2} open={open} setOpen={setOpen} />
       <Layout title='Home' navigation={homeNavigation}>
         <div className='py-8'>
           <LandingPageList initialPages={pages} />
@@ -32,12 +26,23 @@ export default function Home({ pages }: Props) {
   );
 }
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  const { data } = await supabaseAdmin.auth.getSession();
+  const supabase = createServerSupabaseClient<Database>(ctx);
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session)
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
 
   const pageData = await supabaseAdmin
     .from("landing_pages")
     .select("*")
-    .eq("user_id", "bd8b316a-845c-45a0-bee7-168611a97574");
+    .eq("user_id", session.user.id);
   const pages = pageData.data;
   return {
     props: { pages },

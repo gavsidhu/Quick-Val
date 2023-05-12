@@ -42,7 +42,23 @@ interface ChartData {
   [key: string]: DateData;
 }
 
-const LineChart: React.FC = () => {
+// Add a new prop to accept the array of objects
+interface LineChartProps {
+  transactions: {
+    amount: number | null;
+    client_secret: string | null;
+    created_at: string | null;
+    customer_id: string | null;
+    id: number;
+    landing_page_id: number;
+    payment_intent_created: number | null;
+    payment_intent_id: string | null;
+    status: string | null;
+    user_id: string;
+  }[];
+}
+
+const LineChart: React.FC<LineChartProps> = ({ transactions }) => {
   const [date, setDate] = useState<string>("today");
   const [options] = useState<Option[]>([
     { label: "Today", value: "today" },
@@ -54,6 +70,23 @@ const LineChart: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<number>(0);
   const [chartData, setChartData] = useState<ChartData | null>(null);
+  // Add a function to process the transactions and return the required data format
+  const processTransactions = (
+    transactions: LineChartProps["transactions"]
+  ): ChartData => {
+    // Calculate the data based on the transactions array
+    // ...
+    // Return the calculated data
+    return {
+      // ...
+    };
+  };
+
+  useEffect(() => {
+    // Call the processTransactions function with the transactions prop
+    const processedData = processTransactions(transactions);
+    setChartData(processedData);
+  }, [transactions]);
 
   useEffect(() => {
     fetch(

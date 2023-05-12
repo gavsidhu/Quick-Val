@@ -2,18 +2,9 @@ import React, { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { HiBars3, HiBell, HiUserCircle, HiXMark } from "react-icons/hi2";
 import { supabase } from "@/lib/supabaseClient";
-
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
-
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-];
+import { useUser } from "@supabase/auth-helpers-react";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/router";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -26,6 +17,9 @@ type Props = {
 };
 
 export default function Layout({ title, children, navigation }: Props) {
+  const user = useUser();
+  const router = useRouter();
+  const supabaseAuth = createBrowserSupabaseClient();
   return (
     <>
       <div className='min-h-full'>
@@ -84,26 +78,15 @@ export default function Layout({ title, children, navigation }: Props) {
                         leaveTo='transform opacity-0 scale-95'
                       >
                         <Menu.Items className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
-                          {userNavigation.map((item) => (
-                            <Menu.Item key={item.name}>
-                              {({ active }) => (
-                                <a
-                                  href={item.href}
-                                  className={classNames(
-                                    active ? "bg-gray-100" : "",
-                                    "block px-4 py-2 text-sm text-gray-700"
-                                  )}
-                                >
-                                  {item.name}
-                                </a>
-                              )}
-                            </Menu.Item>
-                          ))}
+                          <Menu.Item>
+                            <p className='px-4 truncate'>{user?.email}</p>
+                          </Menu.Item>
                           <Menu.Item>
                             <button
-                              onClick={async () =>
-                                await supabase.auth.signOut()
-                              }
+                              onClick={async () => {
+                                await supabaseAuth.auth.signOut();
+                                router.replace("/login");
+                              }}
                               className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left'
                             >
                               Sign out
@@ -152,25 +135,21 @@ export default function Layout({ title, children, navigation }: Props) {
                       <HiUserCircle className='h-8 w-8' />
                     </div>
                     <div className='ml-3'>
-                      <div className='text-base font-medium text-gray-800'>
-                        {user.name}
-                      </div>
                       <div className='text-sm font-medium text-gray-500'>
-                        {user.email}
+                        {user?.email}
                       </div>
                     </div>
                   </div>
                   <div className='mt-3 space-y-1'>
-                    {userNavigation.map((item) => (
-                      <Disclosure.Button
-                        key={item.name}
-                        as='a'
-                        href={item.href}
-                        className='block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800'
-                      >
-                        {item.name}
-                      </Disclosure.Button>
-                    ))}
+                    <button
+                      onClick={async () => {
+                        await supabaseAuth.auth.signOut();
+                        router.replace("/login");
+                      }}
+                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left'
+                    >
+                      Sign out
+                    </button>
                   </div>
                 </div>
               </Disclosure.Panel>

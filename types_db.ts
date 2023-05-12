@@ -99,7 +99,7 @@ export interface Database {
       }
       payments: {
         Row: {
-          amount: number | null
+          amount: number
           client_secret: string | null
           created_at: string | null
           customer_id: string | null
@@ -111,7 +111,7 @@ export interface Database {
           user_id: string
         }
         Insert: {
-          amount?: number | null
+          amount: number
           client_secret?: string | null
           created_at?: string | null
           customer_id?: string | null
@@ -123,7 +123,7 @@ export interface Database {
           user_id: string
         }
         Update: {
-          amount?: number | null
+          amount?: number
           client_secret?: string | null
           created_at?: string | null
           customer_id?: string | null

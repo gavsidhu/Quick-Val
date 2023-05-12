@@ -1,5 +1,5 @@
 export const homeNavigation = [
-  { name: "Shops", href: "/", current: false },
+  { name: "Landing Pages", href: "/", current: false },
   { name: "Account", href: "/account", current: false },
 ];
 

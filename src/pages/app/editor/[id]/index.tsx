@@ -8,6 +8,7 @@ import { GetServerSidePropsContext } from "next";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import axios from "axios";
 import { Database } from "../../../../../types_db";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 type Props = {
   landingPageData: Database["public"]["Tables"]["landing_pages"]["Row"];
@@ -54,7 +55,7 @@ export default function Editor({ landingPageData }: Props) {
       "/api/landing-pages/update-content",
       formData
     );
-    router.push("/app/");
+    router.push("/");
   };
 
   const onFileChange = (
@@ -174,6 +175,17 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
       notFound: true,
     };
   }
+  const supabase = createServerSupabaseClient<Database>(ctx);
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session)
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
 
   const { data, error } = await supabaseAdmin
     .from("landing_pages")

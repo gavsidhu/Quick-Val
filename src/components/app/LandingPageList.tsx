@@ -54,18 +54,15 @@ export default function LandingPageList({ initialPages }: Props) {
           <div className='py-4'>
             <button
               type='button'
-              className='inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+              className='inline-flex items-center gap-x-1.5 rounded-md bg-black py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-white hover:text-black border border-black'
               onClick={() => router.push("/new-landing-page")}
             >
               <HiPlus className='-ml-0.5 h-5 w-5' aria-hidden='true' />
-              New project
+              New landing page
             </button>
           </div>{" "}
         </div>
-        <ul
-          role='list'
-          className='divide-y divide-gray-100 shadow-xl px-4 rounded-lg border border-gray-200'
-        >
+        <ul role='list' className=' px-4 rounded-lg border border-black'>
           {pages.map((page) => (
             <li
               key={page.id}
@@ -84,7 +81,7 @@ export default function LandingPageList({ initialPages }: Props) {
               <div className='flex flex-none items-center gap-x-4'>
                 <Link
                   href={`/landing-page/${page.id}`}
-                  className='hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block'
+                  className='hidden rounded-md bg-white px-2.5 py-1.5 text-sm hover:bg-black hover:text-white font-semibold text-black border-black border sm:block'
                 >
                   View landing page
                   <span className='sr-only'>, {page.title}</span>
@@ -122,9 +119,13 @@ export default function LandingPageList({ initialPages }: Props) {
                         )}
                       </Menu.Item>
                       <Menu.Item>
-                        {({ active }) => (
+                        {({ active }: { active: boolean }) => (
                           <Link
-                            href={`http://${page.subdomain}.${url}/`}
+                            href={`${
+                              process.env.NODE_ENV === "development"
+                                ? `http://${page.subdomain}.localhost:3000/`
+                                : `https://${page.subdomain}.quick-val.vercel.app/`
+                            }`}
                             target='_blank'
                             className={classNames(
                               active ? "bg-gray-50" : "",

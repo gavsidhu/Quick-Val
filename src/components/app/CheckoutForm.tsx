@@ -21,6 +21,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       setCurrentUrl(window.location.href);
+      console.log(window.location.href);
     }
   }, []);
   const [email, setEmail] = React.useState("");
@@ -73,7 +74,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = () => {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: currentUrl + "confirmation",
+        return_url: currentUrl + "/confirmation",
       },
     });
 
@@ -87,7 +88,6 @@ const CheckoutForm: React.FC<CheckoutFormProps> = () => {
     } else {
       setMessage("An unexpected error occurred.");
     }
-    console.log("this triggered");
     setIsLoading(false);
   };
 

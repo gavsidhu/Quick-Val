@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
@@ -28,9 +29,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const router = useRouter();
   const [error] = useState(null);
   const [initialLoading, setInitialLoading] = useState(true);
+  const supabaseAuth = createBrowserSupabaseClient();
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
+    supabaseAuth.auth.onAuthStateChange((event, session) => {
       if (session && session.user) {
         setUser(session?.user as User);
       } else {

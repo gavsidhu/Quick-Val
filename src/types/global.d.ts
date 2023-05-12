@@ -40,3 +40,18 @@ export type PhysicalProductTemplateData = {
   price: string;
   ctaImage: string;
 };
+
+export interface Session {
+  id: number;
+  page: string;
+  device: string;
+  ip_address: string;
+  time_spent: string | null;
+  visit_time: string;
+  country: string;
+  http_referer: string;
+  created_at: string;
+  landing_page_id: number;
+  user_id: string;
+  end_time: string | null;
+}

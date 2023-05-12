@@ -59,12 +59,12 @@ export default function PhysicalProductTemplate({ data, setOpen }: Props) {
                   {data.heroText}
                 </p>
               </div>
-              <a
-                href='#buyButton'
+              <button
+                onClick={handleClick}
                 className='inline-block px-12 py-4 text-lg font-semibold text-white transition duration-300 ease-in-out transform bg-blue-800 rounded-full shadow hover:bg-blue-900 hover:shadow-lg hover:scale-110'
               >
                 {data.heroButtonText}
-              </a>
+              </button>
             </div>
             <img
               className='mx-auto xl:max-w-screen-lg mb-28'
