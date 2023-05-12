@@ -31,14 +31,14 @@ export default function Layout({ title, children, navigation }: Props) {
                   <div className='flex'>
                     <div className='flex flex-shrink-0 items-center'>
                       <img
-                        className='block h-8 w-auto lg:hidden'
-                        src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600'
-                        alt='Your Company'
+                        className='rounded-full block h-12 w-auto lg:hidden'
+                        src='/logo.png'
+                        alt='Quick Val'
                       />
                       <img
-                        className='hidden h-8 w-auto lg:block'
-                        src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600'
-                        alt='Your Company'
+                        className='rounded-full hidden h-12 w-auto lg:block'
+                        src='/logo.png'
+                        alt='Quick Val'
                       />
                     </div>
                     <div className='hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8'>
@@ -48,7 +48,7 @@ export default function Layout({ title, children, navigation }: Props) {
                           href={item.href}
                           className={classNames(
                             item.current
-                              ? "border-indigo-500 text-gray-900"
+                              ? "border-black text-gray-900"
                               : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                             "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium"
                           )}
@@ -63,7 +63,7 @@ export default function Layout({ title, children, navigation }: Props) {
                     {/* Profile dropdown */}
                     <Menu as='div' className='relative ml-3'>
                       <div>
-                        <Menu.Button className='flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'>
+                        <Menu.Button className='flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-offset-2'>
                           <span className='sr-only'>Open user menu</span>
                           <HiUserCircle className='h-10 w-10' />
                         </Menu.Button>
@@ -98,7 +98,7 @@ export default function Layout({ title, children, navigation }: Props) {
                   </div>
                   <div className='-mr-2 flex items-center sm:hidden'>
                     {/* Mobile menu button */}
-                    <Disclosure.Button className='inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'>
+                    <Disclosure.Button className='inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2  focus:ring-offset-2'>
                       <span className='sr-only'>Open main menu</span>
                       {open ? (
                         <HiXMark className='block h-6 w-6' aria-hidden='true' />
@@ -119,7 +119,7 @@ export default function Layout({ title, children, navigation }: Props) {
                       href={item.href}
                       className={classNames(
                         item.current
-                          ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                          ? "border-black bg-black text-white"
                           : "border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800",
                         "block border-l-4 py-2 pl-3 pr-4 text-base font-medium"
                       )}

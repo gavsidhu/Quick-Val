@@ -140,7 +140,7 @@ export default function NewLandingPageForm() {
               </div>
               <Listbox value={goal} onChange={setGoal}>
                 <div className='relative mt-1'>
-                  <Listbox.Button className='relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left border border-gray-200 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm'>
+                  <Listbox.Button className='relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left border border-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm'>
                     <span className='block truncate'>{goal.title}</span>
                     <span className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2'>
                       <HiChevronUpDown
@@ -160,10 +160,9 @@ export default function NewLandingPageForm() {
                         <Listbox.Option
                           key={index}
                           className={({ active }) =>
-                            `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                              active
-                                ? "bg-amber-100 text-amber-900"
-                                : "text-gray-900"
+                            `relative cursor-default select-none py-2 pl-10 pr-4 ${active
+                              ? "bg-amber-100 text-amber-900"
+                              : "text-gray-900"
                             }`
                           }
                           value={goal}
@@ -171,9 +170,8 @@ export default function NewLandingPageForm() {
                           {({ selected }) => (
                             <>
                               <span
-                                className={`block truncate ${
-                                  selected ? "font-medium" : "font-normal"
-                                }`}
+                                className={`block truncate ${selected ? "font-medium" : "font-normal"
+                                  }`}
                               >
                                 {goal.title}
                               </span>

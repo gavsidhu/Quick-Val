@@ -107,7 +107,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = () => {
         options={paymentElementOptions as StripePaymentElementOptions}
       />
       <button
-        className='w-1/2 rounded-md bg-indigo-600 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+        className='w-1/2 rounded-md bg-black px-3 py-3 text-sm font-semibold border border-black text-white shadow-sm hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
         disabled={isLoading || !stripe || !elements}
         id='submit'
       >
