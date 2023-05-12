@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 
 type Props = {
   data: any;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  setOpen?: Dispatch<SetStateAction<boolean>>;
 };
 
 function classNames(...classes: string[]) {
@@ -34,6 +34,11 @@ export default function PhysicalProductTemplate({ data, setOpen }: Props) {
       imgUrl: data.featureImgUrl3,
     },
   ];
+  const handleClick = () => {
+    if (setOpen) {
+      setOpen(true);
+    }
+  };
   return (
     <>
       <Head>
@@ -306,7 +311,7 @@ export default function PhysicalProductTemplate({ data, setOpen }: Props) {
                 <div className='flex items-center justify-center space-x-4 lg:justify-start'>
                   <button
                     id='buyButton'
-                    onClick={() => setOpen(true)}
+                    onClick={handleClick}
                     className='inline-block px-6 py-3 text-lg font-semibold text-blue-800 transition duration-300 bg-white rounded-full shadow hover:bg-blue-900 hover:text-white hover:shadow-lg'
                   >
                     {data.ctaButtonText}
