@@ -85,7 +85,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             user_id: user_id,
           });
           debugData = {
-            amount: paymentIntentSucceeded.amount,
+            amount: paymentIntentSucceeded.amount / 100,
             client_secret: paymentIntentSucceeded.client_secret,
             customer_id: paymentIntentSucceeded.customer as string,
             landing_page_id: parseInt(landing_page_id),
