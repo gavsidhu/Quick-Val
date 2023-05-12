@@ -23,7 +23,7 @@ export default async function handler(
     res.status(200).end();
     return;
   }
-  const { landingPageId, user_id } = req.body;
+  const { landingPageId } = req.body;
 
   try {
     const { data, error } = await supabaseAdmin
@@ -36,6 +36,19 @@ export default async function handler(
     if (error) {
       return res.status(400).json({ message: 'There was an error', error });
     }
+
+    const user = await supabaseAdmin
+      .from('landing_pages')
+      .select('user_id')
+      .eq('id', parseInt(landingPageId));
+
+    if (!user.data || user.data.length < 1) {
+      return res.status(400).json({ message: 'User Not found' });
+    }
+    if (user.error) {
+      return res.status(400).json({ message: 'There was an error', error });
+    }
+
     const amount =
       parseFloat((data[0]?.content as ContentData)?.price as string) * 100;
     console.log(amount);
@@ -47,7 +60,7 @@ export default async function handler(
         enabled: true,
       },
       metadata: {
-        user_id: user_id,
+        user_id: user.data[0].user_id,
         landing_page_id: parseInt(landingPageId),
       },
     });
