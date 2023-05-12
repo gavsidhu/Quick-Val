@@ -88,7 +88,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
-    res.send({ recieved: true, debugData });
+    res.send({ recieved: true });
   } catch (error) {
     res.status(500).json({
       code: 'webhook_failed',
