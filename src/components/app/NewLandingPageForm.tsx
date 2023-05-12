@@ -222,10 +222,10 @@ export default function NewLandingPageForm() {
                         <>
                           <span className='flex flex-1'>
                             <span className='flex flex-col space-y-3'>
-                              <div className=''>
+                              <div className='h-[300px]'>
                                 <img
-                                  src='https://placehold.co/250x300'
-                                  className='max-w-full'
+                                  src='/template-mockup.png'
+                                  className='max-w-full mx-auto max-h-full shadow-md'
                                 />
                               </div>
 
