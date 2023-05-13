@@ -152,7 +152,7 @@ export default function Home() {
             </div>
             <div className='mt-16 flow-root sm:mt-24'>
               <div>
-                <video controls muted autoPlay className='rounded-xl shadow-lg'>
+                <video controls muted className='rounded-xl shadow-lg'>
                   <source src='/demo.mp4' width={2100} height={1200} />
                 </video>
               </div>
