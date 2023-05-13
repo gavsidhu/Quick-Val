@@ -135,7 +135,7 @@ export default function NewLandingPageForm() {
                   className='block px-2 w-full min-w-0 flex-1 border-r-0 rounded-r-none rounded-md border border-gray-300 py-1.5 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:outline-none'
                 />
                 <span className='inline-flex items-center rounded-r-md border border-l-0 border-gray-300 px-3 text-gray-500 sm:text-sm'>
-                  .quick-val.vercel.app
+                  .quickval.co
                 </span>
               </div>
               <Listbox value={goal} onChange={setGoal}>
@@ -160,9 +160,10 @@ export default function NewLandingPageForm() {
                         <Listbox.Option
                           key={index}
                           className={({ active }) =>
-                            `relative cursor-default select-none py-2 pl-10 pr-4 ${active
-                              ? "bg-gray-100 text-gray-900"
-                              : "text-gray-900"
+                            `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                              active
+                                ? "bg-gray-100 text-gray-900"
+                                : "text-gray-900"
                             }`
                           }
                           value={goal}
@@ -170,8 +171,9 @@ export default function NewLandingPageForm() {
                           {({ selected }) => (
                             <>
                               <span
-                                className={`block truncate ${selected ? "font-medium" : "font-normal"
-                                  }`}
+                                className={`block truncate ${
+                                  selected ? "font-medium" : "font-normal"
+                                }`}
                               >
                                 {goal.title}
                               </span>
